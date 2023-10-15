@@ -1,7 +1,5 @@
 # Running VEGAS at UCLA
 
-[TOC]
-
 ## Preliminary
 
 ### Setting up your environment 
