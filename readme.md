@@ -76,6 +76,8 @@ https://github.com/VERITAS-Observatory/VEGAS/blob/documentation/v2_5_10/document
 
 ## Helper package for UCLA users
 
+You can find the helper package in `/home/wning/userspace/runVEGAS`. It would be convenient to add a path to this in your `~/.bashrc`.
+
 This package contains:
 
 1. extendRunlist.py
