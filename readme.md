@@ -200,6 +200,7 @@ If submitting to the queue:
 qsub -j oe cp_data.sh
 ```
 
+You can check the status of the jobs you submitted to the queue with `qstat`.
 
 
 ### Generate scripts
@@ -239,8 +240,6 @@ To submit a single script, you can do
 ```shell
 qsub ./scripts/65310_laser_stg1.sh
 ```
-
-
 
 For UCLA users, a script is available in the helper package to submit all the scripts of a given stage with the specified options. You can submit up to stage 5 together in one go!
 
