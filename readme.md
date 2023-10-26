@@ -14,9 +14,9 @@ Both approaches are already set up for all UCLA users. Pick the one that works t
 
 - Docker images to use
 
-  `dee8569eaaa2` : VEGAS 2.5.9
+  `77e08ff5c155` : VEGAS 2.5.9
 
-  `a247d44555d1`: VEGAS 2.5.10
+  `333121b9bc36`: VEGAS 2.5.10
 
 - You can go into the containers by calling
 
@@ -102,7 +102,7 @@ This package contains:
 
 ## Example
 
-Try run through this example with the UCLA helper package!! 
+Try run through this example with the UCLA helper package!! Make a directory in your **userspace** to run this example!
 
 
 
