@@ -1,6 +1,5 @@
 # User Guide for runVEGAS package at UCLA
 
-[TOC]
 
 ## Use Cases
 
