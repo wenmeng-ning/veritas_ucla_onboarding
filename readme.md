@@ -47,12 +47,14 @@ Both approaches are already set up for all UCLA users. Pick the one that works t
 
 In order to run the scripts, please make sure you have the relevent packages! You can run the following to install the packages needed for this analysis!
 ```
-
 python3 -m pip install -U matplotlib
 python3 -m pip install scipy
-
 ```
 
+Or you can copy the installer.txt in this repo and simply call
+```
+python3 -m pip install -r installer.txt
+```
 
 
 ## Introduction to VEGAS
