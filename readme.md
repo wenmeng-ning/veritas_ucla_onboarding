@@ -29,7 +29,6 @@ Both approaches are already set up for all UCLA users. Pick the one that works t
   ```
   vaStage1
   ```
-
   
 
 #### Shell script (.bashrc)
@@ -44,7 +43,17 @@ Both approaches are already set up for all UCLA users. Pick the one that works t
   source /home/wning/userspace/onboarding/vegasV2510.bashrc
   ```
 
-  
+### Python packages
+
+In order to run the scripts, please make sure you have the relevent packages! You can run the following to install the packages needed for this analysis!
+```
+
+python3 -m pip install -U matplotlib
+python3 -m pip install scipy
+
+```
+
+
 
 ## Introduction to VEGAS
 
