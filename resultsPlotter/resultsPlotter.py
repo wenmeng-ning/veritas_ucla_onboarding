@@ -52,6 +52,7 @@ def plot_spec(spec_file):
     x = np.linspace(spec[0].EBinLowEdge[0],spec[0].EBinHiEdge[-1],100)
     y = norm*x**ind
     ax[0].plot(x,y,linewidth=3)
+    ax[0].set_xscale('log')
     ax[0].set_yscale('log')
     ax[0].set_xlabel('Energy [TeV]')
     ax[0].set_ylabel(r"dN/dE [Te$V^{-1}$ m$^{-2}$ s$^{-1}$]")
@@ -65,6 +66,7 @@ def plot_spec(spec_file):
                    xy=(0.3,0.67),xycoords='axes fraction')
     
     ax[1].scatter(E,sig,s=75)
+    ax[1].set_xscale('log')
     ax[1].set_xlabel('Energy [TeV]')
     ax[1].set_ylabel(r'Significance [$\sigma$]')
     ax[1].set_title('Significance vs Energy')
