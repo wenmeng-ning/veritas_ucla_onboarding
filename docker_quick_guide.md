@@ -1,6 +1,6 @@
 # Docker Quick Guide
 
-Docker is a very lightweight yet powerful tool to help create completely isolate units (docker containers), each of which encapsulate the entire environment along with all the needed applications and their dependencies. Docker helps eliminate the problems caused by difference in versions and operation systems and make sure everything runs under the consistent conditions.
+Docker is a very lightweight yet powerful tool to help create completely isolate units (docker containers), each of which encapsulates the entire environment along with all the needed applications and their dependencies. Docker helps eliminate the problems caused by difference in versions and operation systems and make sure everything runs under consistent conditions.
 
 
 
