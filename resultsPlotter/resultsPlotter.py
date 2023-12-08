@@ -11,6 +11,7 @@ usage: ./resultsPlotter.py [-options] filepath
 import argparse
 import matplotlib.pyplot as plt
 from astropy.io import fits
+from astropy.table import Table
 import numpy as np
 from scipy import stats
 import os
@@ -19,6 +20,7 @@ parser = argparse.ArgumentParser(
     description='Takes Stage 6 files and make plots')
 parser.add_argument('-spec','-spectrum', default='', help='path to spectrum fits file')
 parser.add_argument('-rbm', default='', help='path to rbm fits file')
+parser.add_argument('-log', default='', help='path to the rbm log file, this is needed for the rbm plots')
 
 try:
     args = parser.parse_args() # grabs sys.argv by default
@@ -27,6 +29,7 @@ except:
 
 specfile = args.spec
 rbmfile = args.rbm
+logfile = args.log
 
 def chi_sq_gof(energy,flux,error,normalization,index):
     x = energy.copy()
@@ -77,10 +80,29 @@ def plot_spec(spec_file):
     ax[1].annotate(ax1_str,xy=(0.4,0.75),xycoords='axes fraction')
     plt.show()
 
-def plot_rbm(rbm_file):
+def load_excl_region(log_file):
+    xtable = Table()
+    excl_str = '+++ RBM: Adding the sky map exclusion region :'
+    with open(log_file,'r') as f:
+        sources = []; RAs = []; DECs = []; rs = []
+        for line in f:
+            if excl_str in line:
+                info = line.split(excl_str)[1]
+                sources.append(info.split('RA')[0].strip())
+                RAs.append(info.split(':')[1].split('DEC')[0].strip())
+                DECs.append(info.split(':')[2].split('Radius')[0].strip())
+                rs.append(info.split(':')[-1].strip())
+    xtable['source'] = sources
+    xtable['RA'] = RAs
+    xtable['DEC'] = DECs
+    xtable['r'] = rs
+    return xtable
+
+def plot_rbm(rbm_file,log_file):
     with fits.open(rbm_file) as d_sky:
         raw_excess_map = d_sky[1].data
         sig_map = d_sky[2].data
+        sig_header = d_sky[2].header
         acceptance_map = d_sky[3].data
         raw_on_map = d_sky[4].data
         alpha_map = d_sky[5].data
@@ -90,6 +112,14 @@ def plot_rbm(rbm_file):
 
     maps = [raw_excess_map,sig_map,acceptance_map,
             raw_on_map,alpha_map,unc_excess_map,sig_distri]
+    xtab = load_excl_region(log_file)
+    
+    vec = range(216)
+    x = [sig_header['CRVAL1']+(vec[i]+1-sig_header['CRPIX1'])*sig_header['CDELT1']
+     for i in range(216)]
+    y = [sig_header['CRVAL2']+(vec[i]+1-sig_header['CRPIX2'])*sig_header['CDELT2']
+     for i in range(216)]
+    X, Y = np.meshgrid(x, y)
     
     plt.rcParams.update({'font.size': 25})
     fig, axes = plt.subplots(2,3,figsize=(40,21))
@@ -98,10 +128,17 @@ def plot_rbm(rbm_file):
         for j in range(3):
             ax = axes[i,j]
             m = maps[3*i+j]
-            im = ax.contourf(m,levels=1000)
+            im = ax.contourf(X,Y,m,levels=1000)
+            for k in range(len(xtab)):
+                circ = plt.Circle((np.float64(xtab['RA'][k]),np.float64(xtab['DEC'][k])),
+                                  np.float64(xtab['r'][k]),
+                                  edgecolor='w',linewidth=2.5,fill=False)
+                ax.add_patch(circ)
             ax.set_title(names[3*i+j])
+            ax.set_xlim((min(x),max(x)))
+            ax.set_ylim((min(y),max(y)))
             plt.colorbar(im,fraction=0.046, pad=0.04, ax=ax)
-            ax.set_xlabel('x [pixel]'); ax.set_ylabel('y [pixel]')
+            ax.set_xlabel('RA [$^{\circ}$]'); ax.set_ylabel('DEC [$^{\circ}$]')
     plt.show()
     
 
@@ -119,12 +156,14 @@ if __name__ == '__main__':
     if rbmfile != '':
         print('plotting sky maps...')
         try:
-            plot_rbm(rbmfile)
+            plot_rbm(rbmfile,logfile)
         except FileNotFoundError:
-            rbmfile = input('rbm fits file not found!\ninput path to fits file: ')
+            print('rbm/log file not found!')
+            rbmfile = input('input path to fits file: ')
+            logfile = input('input path to log file: ')
             try:
-                plot_rbm(rbmfile)
+                plot_rbm(rbmfile,logfile)
             except:
-                print('error in plotting sky maps! check rbm fits file!')
+                print('error in plotting sky maps! check rbm fits file and log file!')
     if (specfile == '') and (rbmfile == ''):
         print('no input stage 6 fits file!')
